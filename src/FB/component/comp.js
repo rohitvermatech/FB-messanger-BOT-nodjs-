@@ -2,7 +2,7 @@ require("dotenv").config();
 const request = require('request');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
-let getFacebookUsername = (sender_psid) => {
+let Username = (sender_psid) => {
     return new Promise((resolve, reject) => {
         try {
             // Send the HTTP request to the Messenger Platform
@@ -85,8 +85,95 @@ let markMessageRead = (sender_psid) => {
     })
 };
 
+let Setget = () => {
+    return new Promise((resolve, reject) => {
+        try {
+            let url = `https://graph.facebook.com/v9.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`;
+            let request_body = {
+                "get_started": {
+                    "payload": "GET_STARTED"
+                }
+            };
+            // Send the HTTP request to the Messenger Platform
+            request({
+                "uri": url,
+                "method": "POST",
+                "json": request_body
+            }, (err, res, body) => {
+                if (!err) {
+                    resolve("Done!")
+                } else {
+                    reject("Unable to send message:" + err);
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+let Setgreeting = (greeting_txt) => {
+    return new Promise((resolve, reject) => {
+        try {
+            let url = `https://graph.facebook.com/v9.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`;
+            let request_body = {
+                "greeting": [
+                    {
+                        "locale": "default",
+                        "text": greeting_txt
+                    }
+                ]
+            };
+            // Send the HTTP request to the Messenger Platform
+            request({
+                "uri": url,
+                "method": "POST",
+                "json": request_body
+            }, (err, res, body) => {
+                if (!err) {
+                    resolve("Done!")
+                } else {
+                    reject("Unable to send message:" + err);
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+let Setmenu = (menu) => {
+    return new Promise((resolve, reject) => {
+        try {
+            let url = `https://graph.facebook.com/v9.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`;
+            let request_body = {
+                "persistent_menu": [
+                    menu
+                ]
+            }
+            // Send the HTTP request to the Messenger Platform
+            request({
+                "uri": url,
+                "method": "POST",
+                "json": request_body
+            }, (err, res, body) => {
+                if (!err) {
+                    resolve("Done!")
+                } else {
+                    reject("Unable to send message:" + err);
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 module.exports = {
-    getFacebookUsername: getFacebookUsername,
+    Username: Username,
     markMessageRead: markMessageRead,
-    sendTypingOn: sendTypingOn
+    sendTypingOn: sendTypingOn,
+    Setget: Setget,
+    Setgreeting: Setgreeting,
+    Setmenu: Setmenu
 };
